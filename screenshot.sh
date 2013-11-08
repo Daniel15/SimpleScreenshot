@@ -16,12 +16,11 @@ fileName="$(date +$filenameFormat)"
 filePath="$dir$fileName"
 mkdir -p $dir || fatalError "Could not create directory $dir" 1
 
+sleep 1
 # Take screenshot via scrot
-scrot -s "$filePath" || fatalError "Could not create screenshot" 2
+scrot -d 1 -s -b "$filePath" || fatalError "Could not create screenshot" 2
 
-# Upload with FTP
-ftp -invp -z secure $ftpHost << EOF
-user $ftpUser $ftpPass
+sftp $user@$host << EOF
 mkdir /$subDir
 cd /$subDir
 put $filePath $fileName
